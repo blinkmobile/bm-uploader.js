@@ -1,0 +1,39 @@
+{
+  "name": "blob-uploader.js",
+  "version": "0.0.1",
+  "description": "Javascript wrapper for use of Blob-uploader service",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "eslint": "eslint --fix --cache .",
+    "flow_check": "flow check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blinkmobile/blob-uploader.js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blinkmobile/blob-uploader.js/issues"
+  },
+  "homepage": "https://github.com/blinkmobile/blob-uploader.js#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "del": "^3.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^4.0.0",
+    "gulp-flowtype": "^1.0.0",
+    "gulp-header": "^1.8.8",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "uglify-save-license": "^0.4.1"
+  }
+}
