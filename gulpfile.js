@@ -1,5 +1,9 @@
 const gulp = require('gulp')
 const del = require('del')
+const path = require('path')
+const KarmaServer = require('karma').Server
+const pkg = require('./package.json')
+
 const util = require('gulp-util')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
@@ -8,8 +12,6 @@ const saveLicense = require('uglify-save-license')
 const babel = require('gulp-babel')
 const eslint = require('gulp-eslint')
 const flow = require('gulp-flowtype')
-
-const pkg = require('./package.json')
 
 const DEST = 'dist'
 const FILENAME = 'bm-blob-uploader.js'
@@ -33,9 +35,11 @@ ${banner.replace(/^\/?\s?\*\/?/gm, '')}`)
   return gulp.src('src/*.js')
     .pipe(eslint())
     .pipe(flow())
-    .pipe(babel({
-      presets: [['es2015', { modules: 'umd' }]]
-    }))
+    .pipe(babel())
+    .on('error', (err) => {
+      util.log(util.colors.red('[Compilation Error]'))
+      util.log(util.colors.red(err.message))
+    })
     .pipe(header(banner))
     .pipe(rename(FILENAME))
     .pipe(gulp.dest(DEST))
@@ -54,8 +58,11 @@ gulp.task('minify', ['build'], () => {
     .pipe(gulp.dest('dist'))
 })
 
-gulp.task('test-blob-uploader', () => {
-
+gulp.task('test', ['minify'], (done) => {
+  new KarmaServer({
+    configFile: path.join(__dirname, './karma.conf.js'),
+    singleRun: false
+  }, done).start()
 })
 
 gulp.task('default', ['clean', 'build', 'minify'], () => {})

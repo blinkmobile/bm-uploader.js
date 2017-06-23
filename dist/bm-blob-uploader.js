@@ -4,22 +4,19 @@
  */
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports'], factory);
+    define(['module'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports);
+    factory(module);
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports);
+    factory(mod);
     global.blobUploader = mod.exports;
   }
-})(this, function (exports) {
+})(this, function (module) {
   'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
   var privateVars = new WeakMap();
 
   function blobUploader(apiUrl) {
@@ -77,5 +74,5 @@
     });
   };
 
-  exports.default = blobUploader;
+  module.exports = blobUploader;
 });

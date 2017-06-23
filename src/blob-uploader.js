@@ -56,4 +56,4 @@ blobUploader.prototype._uploadToS3 = function (blob, url) {
   })
 }
 
-export default blobUploader
+module.exports = blobUploader
