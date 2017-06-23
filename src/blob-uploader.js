@@ -17,6 +17,7 @@ blobUploader.prototype.uploadBlob = function (blob) {
   }
 
   return new Promise((resolve, reject) => {
+    const _this = this
     const xhr = new XMLHttpRequest()
     xhr.open('POST', privateVars.get(this).uri, true)
     xhr.onreadystatechange = function () {
@@ -24,7 +25,7 @@ blobUploader.prototype.uploadBlob = function (blob) {
         if (xhr.status === 200) { // success response
           // now upload the file to S3 using the returned url
           const obj = JSON.parse(xhr.responseText)
-          return this._uploadToS3(blob, obj.putUrl)
+          return _this._uploadToS3(blob, obj.putUrl)
             .then(() => {
               resolve(obj.id)
             })

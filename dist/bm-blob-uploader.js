@@ -29,22 +29,23 @@
   }
 
   blobUploader.prototype.uploadBlob = function (blob) {
-    var _this = this;
+    var _this2 = this;
 
     if (!blob) {
       return Promise.reject(new Error('blob argument not passed in'));
     }
 
     return new Promise(function (resolve, reject) {
+      var _this = _this2;
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', privateVars.get(_this).uri, true);
+      xhr.open('POST', privateVars.get(_this2).uri, true);
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             // success response
             // now upload the file to S3 using the returned url
             var obj = JSON.parse(xhr.responseText);
-            return this._uploadToS3(blob, obj.putUrl).then(function () {
+            return _this._uploadToS3(blob, obj.putUrl).then(function () {
               resolve(obj.id);
             }).catch(reject);
           } else {
