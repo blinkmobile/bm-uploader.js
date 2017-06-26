@@ -27,7 +27,7 @@ blobUploader.prototype.uploadBlob = function (blob) {
 
   return fetch(request)
     .then((response) => {
-      if (response.status !== 200) {
+      if (!response.ok) {
         return new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText)
       }
       return response.json()
@@ -53,7 +53,7 @@ blobUploader.prototype._uploadToS3 = function (blob, url) {
 
   return fetch(request)
     .then((response) => {
-      if (response.status !== 200) {
+      if (!response.ok) {
         return new Error('Error uploading to S3: ' + response.status + ' ' + response.statusText)
       }
     })

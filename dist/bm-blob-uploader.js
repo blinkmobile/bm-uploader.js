@@ -45,7 +45,7 @@
     });
 
     return fetch(request).then(function (response) {
-      if (response.status !== 200) {
+      if (!response.ok) {
         return new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText);
       }
       return response.json();
@@ -69,7 +69,7 @@
     });
 
     return fetch(request).then(function (response) {
-      if (response.status !== 200) {
+      if (!response.ok) {
         return new Error('Error uploading to S3: ' + response.status + ' ' + response.statusText);
       }
     }).catch(function (err) {
