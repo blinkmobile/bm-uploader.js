@@ -45,10 +45,15 @@
     });
 
     return fetch(request).then(function (response) {
+      if (response.status !== 200) {
+        return new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText);
+      }
       return response.json();
     }).then(function (apiResponse) {
       _this._uploadToS3(blob, apiResponse.putUrl);
       return apiResponse.id;
+    }).catch(function (err) {
+      return new Error('Error calling blob api service: ', err);
     });
   };
 
@@ -63,7 +68,13 @@
       })
     });
 
-    return fetch(request);
+    return fetch(request).then(function (response) {
+      if (response.status !== 200) {
+        return new Error('Error uploading to S3: ' + response.status + ' ' + response.statusText);
+      }
+    }).catch(function (err) {
+      return new Error('Error uploading to S3: ', err);
+    });
   };
 
   module.exports = blobUploader;
