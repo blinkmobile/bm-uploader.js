@@ -16,45 +16,36 @@ blobUploader.prototype.uploadBlob = function (blob) {
     return Promise.reject(new Error('blob argument not passed in'))
   }
 
-  return new Promise((resolve, reject) => {
-    const _this = this
-    const xhr = new XMLHttpRequest()
-    xhr.open('POST', privateVars.get(this).uri, true)
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) { // success response
-          // now upload the file to S3 using the returned url
-          const obj = JSON.parse(xhr.responseText)
-          return _this._uploadToS3(blob, obj.putUrl)
-            .then(() => {
-              resolve(obj.id)
-            })
-            .catch(reject)
-        } else {
-          return reject(new Error('Error calling blob upload service ' + xhr.status + ' message: ' + xhr.responseText))
-        }
-      }
-    }
-    xhr.send()
+  const request = new Request(privateVars.get(this).uri, {
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    headers: new Headers({
+      'Content-Type': 'text/plain'
+    })
   })
+
+  return fetch(request)
+    .then((response) => {
+      return response.json()
+    }).then((apiResponse) => {
+      this._uploadToS3(blob, apiResponse.putUrl)
+      return apiResponse.id
+    })
 }
 
 blobUploader.prototype._uploadToS3 = function (blob, url) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open('PUT', url, true)
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          resolve()
-        } else {
-          reject(new Error('Error uploading file: ' + xhr.status + ' message: ' + xhr.responseText))
-        }
-      }
-    }
-    xhr.setRequestHeader('Content-type', ' ') // suppress Content-type header
-    xhr.send(blob)
+  var request = new Request(url, {
+    method: 'PUT',
+    mode: 'cors',
+    redirect: 'follow',
+    body: blob,
+    headers: new Headers({
+      'Content-Type': ' '
+    })
   })
+
+  return fetch(request)
 }
 
 module.exports = blobUploader

@@ -61,7 +61,7 @@ gulp.task('minify', ['build'], () => {
 gulp.task('test', ['minify'], (done) => {
   new KarmaServer({
     configFile: path.join(__dirname, './karma.conf.js'),
-    singleRun: false
+    singleRun: true
   }, done).start()
 })
 

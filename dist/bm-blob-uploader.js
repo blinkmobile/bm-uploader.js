@@ -29,50 +29,41 @@
   }
 
   blobUploader.prototype.uploadBlob = function (blob) {
-    var _this2 = this;
+    var _this = this;
 
     if (!blob) {
       return Promise.reject(new Error('blob argument not passed in'));
     }
 
-    return new Promise(function (resolve, reject) {
-      var _this = _this2;
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', privateVars.get(_this2).uri, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // success response
-            // now upload the file to S3 using the returned url
-            var obj = JSON.parse(xhr.responseText);
-            return _this._uploadToS3(blob, obj.putUrl).then(function () {
-              resolve(obj.id);
-            }).catch(reject);
-          } else {
-            return reject(new Error('Error calling blob upload service ' + xhr.status + ' message: ' + xhr.responseText));
-          }
-        }
-      };
-      xhr.send();
+    var request = new Request(privateVars.get(this).uri, {
+      method: 'POST',
+      mode: 'cors',
+      redirect: 'follow',
+      headers: new Headers({
+        'Content-Type': 'text/plain'
+      })
+    });
+
+    return fetch(request).then(function (response) {
+      return response.json();
+    }).then(function (apiResponse) {
+      _this._uploadToS3(blob, apiResponse.putUrl);
+      return apiResponse.id;
     });
   };
 
   blobUploader.prototype._uploadToS3 = function (blob, url) {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('PUT', url, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            resolve();
-          } else {
-            reject(new Error('Error uploading file: ' + xhr.status + ' message: ' + xhr.responseText));
-          }
-        }
-      };
-      xhr.setRequestHeader('Content-type', ' '); // suppress Content-type header
-      xhr.send(blob);
+    var request = new Request(url, {
+      method: 'PUT',
+      mode: 'cors',
+      redirect: 'follow',
+      body: blob,
+      headers: new Headers({
+        'Content-Type': ' '
+      })
     });
+
+    return fetch(request);
   };
 
   module.exports = blobUploader;
