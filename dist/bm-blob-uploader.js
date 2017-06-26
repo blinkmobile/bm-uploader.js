@@ -60,7 +60,7 @@
   blobUploader.prototype._uploadToS3 = function (blob, url) {
     var request = new Request(url, {
       method: 'PUT',
-      mode: 'cors',
+      mode: 'cors-with-forced-preflight',
       redirect: 'follow',
       body: blob,
       headers: new Headers({
