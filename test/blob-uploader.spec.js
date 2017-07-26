@@ -13,7 +13,7 @@ describe('blobuploader', () => {
     })
   })
 
-  describe('#uploadBlob', () => {
+  describe('uploadBlob', () => {
     it('should reject if blob not passed in', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
       uploader.uploadBlob()
