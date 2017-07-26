@@ -34,7 +34,8 @@ ${banner.replace(/^\/?\s?\*\/?/gm, '')}`)
   // perform build
   return gulp.src('src/*.js')
     .pipe(eslint())
-    .pipe(flow())
+    .pipe(eslint.failAfterError())
+    .pipe(flow({ abort: true }))
     .pipe(babel())
     .on('error', (err) => {
       util.log(util.colors.red('[Compilation Error]'))
