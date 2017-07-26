@@ -12,7 +12,9 @@ function blobUploader (apiUrl /* :string */) {
   })
 }
 
-blobUploader.prototype.uploadBlob = function (blob) {
+blobUploader.prototype.uploadBlob = function (
+  blob /*: Blob */
+) /* :Promise<number> */ {
   if (!blob) {
     return Promise.reject(new Error('blob argument not passed in'))
   }
@@ -28,7 +30,6 @@ blobUploader.prototype.uploadBlob = function (blob) {
   const request = new Request(vars.uri, {
     method: 'POST',
     mode: 'cors',
-    redirect: 'follow',
     headers: new Headers({
       'Content-Type': 'text/plain'
     })
@@ -44,14 +45,16 @@ blobUploader.prototype.uploadBlob = function (blob) {
       this._uploadToS3(blob, apiResponse.putUrl)
       return apiResponse.id
     })
-    .catch((err) => new Error('Error calling blob api service: ' + err))
+    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
 
-blobUploader.prototype._uploadToS3 = function (blob, url) {
+blobUploader.prototype._uploadToS3 = function (
+  blob /* :Blob */,
+  url /*: string */
+) /* :Promise<void> */ {
   const request = new Request(url, {
     method: 'PUT',
-    mode: 'cors-with-forced-preflight',
-    redirect: 'follow',
+    mode: 'cors',
     body: blob,
     headers: new Headers({
       'Content-Type': ' '
@@ -64,7 +67,7 @@ blobUploader.prototype._uploadToS3 = function (blob, url) {
         return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText))
       }
     })
-    .catch((err) => new Error('Error uploading to S3: ' + err))
+    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
 module.exports = blobUploader

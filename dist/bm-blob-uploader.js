@@ -15,11 +15,12 @@
     global.blobUploader = mod.exports;
   }
 })(this, function (module) {
+  // @flow
   'use strict';
 
   var privateVars = new WeakMap();
 
-  function blobUploader(apiUrl) {
+  function blobUploader(apiUrl /* :string */) {
     if (!apiUrl) {
       throw new TypeError('blobUploader expects a api URL during instansiation');
     }
@@ -28,14 +29,23 @@
     });
   }
 
-  blobUploader.prototype.uploadBlob = function (blob) {
+  blobUploader.prototype.uploadBlob = function (blob /*: Blob */
+  ) /* :Promise<number> */{
     var _this = this;
 
     if (!blob) {
       return Promise.reject(new Error('blob argument not passed in'));
     }
 
-    var request = new Request(privateVars.get(this).uri, {
+    if (!privateVars || !privateVars.get(this)) {
+      return Promise.reject(new Error('blobUploader uri not configured'));
+    }
+    var vars = privateVars.get(this);
+    if (!vars || !vars.hasOwnProperty('uri')) {
+      return Promise.reject(new Error('blobUploader uri not configured'));
+    }
+
+    var request = new Request(vars.uri, {
       method: 'POST',
       mode: 'cors',
       redirect: 'follow',
@@ -53,14 +63,16 @@
       _this._uploadToS3(blob, apiResponse.putUrl);
       return apiResponse.id;
     }).catch(function (err) {
-      return new Error('Error calling blob api service: ', err);
+      return Promise.reject(new Error('Error calling blob api service: ' + err));
     });
   };
 
-  blobUploader.prototype._uploadToS3 = function (blob, url) {
+  blobUploader.prototype._uploadToS3 = function (blob /* :Blob */
+  , url /*: string */
+  ) /* :Promise<void> */{
     var request = new Request(url, {
       method: 'PUT',
-      mode: 'cors-with-forced-preflight',
+      mode: 'cors',
       redirect: 'follow',
       body: blob,
       headers: new Headers({
@@ -73,7 +85,7 @@
         return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText));
       }
     }).catch(function (err) {
-      return new Error('Error uploading to S3: ', err);
+      return Promise.reject(new Error('Error uploading to S3: ' + err));
     });
   };
 
