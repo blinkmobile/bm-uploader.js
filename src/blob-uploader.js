@@ -35,9 +35,7 @@ blobUploader.prototype.uploadBlob = function (blob) {
       this._uploadToS3(blob, apiResponse.putUrl)
       return apiResponse.id
     })
-    .catch((err) => {
-      return new Error('Error calling blob api service: ', err)
-    })
+    .catch((err) => new Error('Error calling blob api service: ', err))
 }
 
 blobUploader.prototype._uploadToS3 = function (blob, url) {
@@ -57,9 +55,7 @@ blobUploader.prototype._uploadToS3 = function (blob, url) {
         return new Error('Error uploading to S3: ' + response.status + ' ' + response.statusText)
       }
     })
-    .catch((err) => {
-      return new Error('Error uploading to S3: ', err)
-    })
+    .catch((err) => new Error('Error uploading to S3: ', err))
 }
 
 module.exports = blobUploader
