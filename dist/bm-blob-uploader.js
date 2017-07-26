@@ -46,7 +46,7 @@
 
     return fetch(request).then(function (response) {
       if (!response.ok) {
-        return new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText);
+        return Promise.reject(new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText));
       }
       return response.json();
     }).then(function (apiResponse) {
@@ -70,7 +70,7 @@
 
     return fetch(request).then(function (response) {
       if (!response.ok) {
-        return new Error('Error uploading to S3: ' + response.status + ' ' + response.statusText);
+        return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText));
       }
     }).catch(function (err) {
       return new Error('Error uploading to S3: ', err);
