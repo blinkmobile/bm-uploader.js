@@ -48,7 +48,6 @@
     var request = new Request(vars.uri, {
       method: 'POST',
       mode: 'cors',
-      redirect: 'follow',
       headers: new Headers({
         'Content-Type': 'text/plain'
       })
@@ -73,7 +72,6 @@
     var request = new Request(url, {
       method: 'PUT',
       mode: 'cors',
-      redirect: 'follow',
       body: blob,
       headers: new Headers({
         'Content-Type': ' '

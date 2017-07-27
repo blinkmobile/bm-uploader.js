@@ -12,6 +12,9 @@ const saveLicense = require('uglify-save-license')
 const babel = require('gulp-babel')
 const eslint = require('gulp-eslint')
 const flow = require('gulp-flowtype')
+const remark = require('gulp-remark')
+const remarkLint = require('remark-lint')
+const styleGuide = require('remark-preset-lint-recommended')
 
 const DEST = 'dist'
 const FILENAME = 'bm-blob-uploader.js'
@@ -59,11 +62,16 @@ gulp.task('minify', ['build'], () => {
     .pipe(gulp.dest('dist'))
 })
 
-gulp.task('test', ['minify'], (done) => {
+gulp.task('test', ['remark'], (done) => {
   new KarmaServer({
     configFile: path.join(__dirname, './karma.conf.js'),
     singleRun: true
   }, done).start()
+})
+
+gulp.task('remark', ['minify'], (done) => {
+  return gulp.src('{.,docs}/*.md')
+    .pipe(remark().use(remarkLint).use(styleGuide))
 })
 
 gulp.task('default', ['clean', 'build', 'minify'], () => {})

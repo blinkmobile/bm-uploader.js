@@ -30,6 +30,7 @@
     "gulp-eslint": "^4.0.0",
     "gulp-flowtype": "^1.0.0",
     "gulp-header": "^1.8.8",
+    "gulp-remark": "^4.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
@@ -37,6 +38,8 @@
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-jasmine": "^1.1.0",
+    "remark-lint": "^6.0.0",
+    "remark-preset-lint-recommended": "^3.0.0",
     "uglify-save-license": "^0.4.1"
   }
 }
