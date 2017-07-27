@@ -1,4 +1,4 @@
-# blob-uploader.js
+# blinkmobile / blob-uploader.js
 
 ## Documentation
 
