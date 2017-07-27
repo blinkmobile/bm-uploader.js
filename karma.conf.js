@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Thu Jun 22 2017 16:59:51 GMT+1000 (AEST)
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -66,6 +66,13 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    customLaunchers: {
+      ChromeTravisCI: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    }
   })
 }

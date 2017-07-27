@@ -12,8 +12,11 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+before_script:
+  - export CHROME_BIN=/usr/bin/google-chrome
 install:
   - npm install --global npm
   - npm install -g gulp
   - npm install -g karma
   - npm install
+  
