@@ -2,6 +2,17 @@
 
 /* eslint-disable */
 describe('blobuploader', () => {
+
+  var originalTimeout;
+    beforeEach(() => {
+      originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    })
+
+    afterEach(() => {
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+    })
+    
   describe('Constructor', () => {
     it('should throw a type error if no url is supplied', () => {
       expect(() => { blobUploader() }).toThrow()
@@ -20,11 +31,6 @@ describe('blobuploader', () => {
         .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
-    var originalTimeout;
-    beforeEach(function() {
-      originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-    })
 
     it('should succeed when given a blob', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
@@ -40,9 +46,34 @@ describe('blobuploader', () => {
         done.fail(e)
       }
     })
+  })
 
-    afterEach(function() {
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  describe('retrieveBlobUrl', () => {
+    it('should reject if uuid not passed in', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      uploader.retrieveBlobUrl()
+        .then((blob) => { done.fail() })
+        .catch((err) => { done() })
+    })
+
+    it('should succeed when given a valid uuid', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      try {
+      uploader.uploadBlob(new Blob(['111']))
+        .then((id) => {
+          expect(id.length).toBeGreaterThan(0)
+          uploader.retrieveBlobUrl(id)
+            .then((url) => {
+              expect(url).toBeDefined()
+              done()
+            })
+            .catch((err) => { done.fail(err) })
+        })
+        .catch((err) => { done.fail(err) })
+      }
+      catch(e) {
+        done.fail(e)
+      }
     })
   })
 })
