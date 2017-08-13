@@ -69,7 +69,7 @@ module.exports = function (config) {
     concurrency: Infinity,
 
     customLaunchers: {
-      ChromeTravisCI: {
+      Chrome_travis_ci: {
         base: 'Chrome',
         flags: ['--no-sandbox']
       }
