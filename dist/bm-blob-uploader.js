@@ -69,7 +69,10 @@
     var request = new Request(url, {
       method: 'PUT',
       mode: 'cors',
-      body: blob
+      body: blob,
+      headers: new Headers({
+        'Content-Type': ' '
+      })
     });
 
     return fetch(request).then(function (response) {

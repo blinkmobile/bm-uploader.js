@@ -53,7 +53,10 @@ blobUploader.prototype._uploadToS3 = function (
   const request = new Request(url, {
     method: 'PUT',
     mode: 'cors',
-    body: blob
+    body: blob,
+    headers: new Headers({
+      'Content-Type': ' '
+    })
   })
 
   return fetch(request)
