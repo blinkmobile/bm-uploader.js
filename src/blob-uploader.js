@@ -5,7 +5,7 @@ const privateVars = new WeakMap()
 
 function blobUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('blobUploader expects a api URL during instansiation')
+    throw new TypeError('blobUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
@@ -95,9 +95,7 @@ blobUploader.prototype.retrieveBlobUrl = function (
       }
       return response.json()
     })
-    .then((apiResponse) => {
-      return apiResponse.getUrl
-    })
+    .then((apiResponse) => apiResponse.getUrl)
     .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
 

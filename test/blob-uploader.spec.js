@@ -65,6 +65,7 @@ describe('blobuploader', () => {
           uploader.retrieveBlobUrl(id)
             .then((url) => {
               expect(url).toBeDefined()
+              expect(url.length).toBeGreaterThan(0)
               done()
             })
             .catch((err) => { done.fail(err) })
