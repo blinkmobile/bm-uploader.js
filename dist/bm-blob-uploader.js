@@ -22,7 +22,7 @@
 
   function blobUploader(apiUrl /* :string */) {
     if (!apiUrl) {
-      throw new TypeError('blobUploader expects a api URL during instansiation');
+      throw new TypeError('blobUploader expects a api URL during instantiation');
     }
     privateVars.set(this, {
       uri: apiUrl
@@ -59,7 +59,7 @@
       _this._uploadToS3(blob, apiResponse.putUrl);
       return apiResponse.id;
     }).catch(function (err) {
-      return Promise.reject(new Error('Error calling blob api service: ' + err));
+      return Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err)));
     });
   };
 
@@ -80,7 +80,7 @@
         return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText));
       }
     }).catch(function (err) {
-      return Promise.reject(new Error('Error uploading to S3: ' + err));
+      return Promise.reject(new Error('Error uploading to S3: ' + JSON.stringify(err)));
     });
   };
 
@@ -111,7 +111,7 @@
     }).then(function (apiResponse) {
       return apiResponse.getUrl;
     }).catch(function (err) {
-      return Promise.reject(new Error('Error calling blob api service: ' + err));
+      return Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err)));
     });
   };
 

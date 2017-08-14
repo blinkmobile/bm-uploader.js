@@ -16,7 +16,8 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'dist/*.js',
-      'test/*.spec.js'
+      'test/*.spec.js',
+      'node_modules/fetch-mock/es5/client-browserified.js'
     ],
 
 
