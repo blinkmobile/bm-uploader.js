@@ -19,9 +19,6 @@ blobUploader.prototype.uploadBlob = function (
     return Promise.reject(new Error('blob argument not provided'))
   }
 
-  if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
-  }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
     return Promise.reject(new Error('blobUploader uri not configured'))
@@ -43,7 +40,7 @@ blobUploader.prototype.uploadBlob = function (
       this._uploadToS3(blob, apiResponse.putUrl)
       return apiResponse.id
     })
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err))))
+    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
 
 blobUploader.prototype._uploadToS3 = function (
@@ -65,7 +62,7 @@ blobUploader.prototype._uploadToS3 = function (
         return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText))
       }
     })
-    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + JSON.stringify(err))))
+    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
 blobUploader.prototype.retrieveBlobUrl = function (
@@ -96,7 +93,7 @@ blobUploader.prototype.retrieveBlobUrl = function (
       return response.json()
     })
     .then((apiResponse) => apiResponse.getUrl)
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err))))
+    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
 
 module.exports = blobUploader

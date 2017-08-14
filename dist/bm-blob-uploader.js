@@ -37,9 +37,6 @@
       return Promise.reject(new Error('blob argument not provided'));
     }
 
-    if (!privateVars || !privateVars.get(this)) {
-      return Promise.reject(new Error('blobUploader uri not configured'));
-    }
     var vars = privateVars.get(this);
     if (!vars || !vars.hasOwnProperty('uri')) {
       return Promise.reject(new Error('blobUploader uri not configured'));
@@ -59,7 +56,7 @@
       _this._uploadToS3(blob, apiResponse.putUrl);
       return apiResponse.id;
     }).catch(function (err) {
-      return Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err)));
+      return Promise.reject(new Error('Error calling blob api service: ' + err));
     });
   };
 
@@ -80,7 +77,7 @@
         return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText));
       }
     }).catch(function (err) {
-      return Promise.reject(new Error('Error uploading to S3: ' + JSON.stringify(err)));
+      return Promise.reject(new Error('Error uploading to S3: ' + err));
     });
   };
 
@@ -111,7 +108,7 @@
     }).then(function (apiResponse) {
       return apiResponse.getUrl;
     }).catch(function (err) {
-      return Promise.reject(new Error('Error calling blob api service: ' + JSON.stringify(err)));
+      return Promise.reject(new Error('Error calling blob api service: ' + err));
     });
   };
 
