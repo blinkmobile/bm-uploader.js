@@ -32,7 +32,7 @@ blobUploader.prototype.uploadBlob = function (
   return fetch(request)
     .then((response) => {
       if (!response.ok) {
-        return Promise.reject(new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText))
+        return Promise.reject(new Error(response.status + ' ' + response.statusText))
       }
       return response.json()
     })
@@ -59,7 +59,7 @@ blobUploader.prototype._uploadToS3 = function (
   return fetch(request)
     .then((response) => {
       if (!response.ok) {
-        return Promise.reject(Error('Error uploading to S3: ' + response.status + ' ' + response.statusText))
+        return Promise.reject(Error(response.status + ' ' + response.statusText))
       }
     })
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
@@ -88,12 +88,12 @@ blobUploader.prototype.retrieveBlobUrl = function (
   return fetch(request)
     .then((response) => {
       if (!response.ok) {
-        return Promise.reject(new Error('Error calling blob api service: ' + response.status + ' ' + response.statusText))
+        return Promise.reject(new Error(response.status + ' ' + response.statusText))
       }
       return response.json()
     })
     .then((apiResponse) => apiResponse.getUrl)
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
+    .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
 }
 
 module.exports = blobUploader
