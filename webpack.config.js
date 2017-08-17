@@ -18,7 +18,7 @@ let distPath = path.resolve(__dirname, 'dist')
 module.exports = {
   entry: {
     'bm-blob-uploader': './src/blob-uploader.js',
-    'bm-blob-uploader.min' : './src/blob-uploader.js'
+    'bm-blob-uploader.min': './src/blob-uploader.js'
   },
   output: {
     filename: '[name].js',
