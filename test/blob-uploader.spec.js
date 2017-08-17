@@ -26,7 +26,6 @@ describe('blobuploader', () => {
 
     it('should succeed if url is supplied', () => {
       expect(() => { blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
-      // expect(() => { var a = true }).toThrow()
     })
   })
 

@@ -42,9 +42,8 @@
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
     "flow_check": "flow check",
-    "karma_start": "karma start",
-    "pretest": "npm-run-all eslint fixpack flow_check remark build karma_start",
+    "pretest": "npm-run-all eslint fixpack flow_check remark build",
     "remark": "remark . --use remark-preset-lint-recommended",
-    "test": "karma run -- --grep=blobuploader"
+    "test": "karma start karma.conf.js --single-run"
   }
 }
