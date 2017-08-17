@@ -19,7 +19,5 @@ before_script:
   - sleep 3 # give xvfb some time to start
 install:
   - npm install --global npm
-  - npm install -g gulp
-  - npm install -g karma
   - npm install -g karma-cli
   - npm install
