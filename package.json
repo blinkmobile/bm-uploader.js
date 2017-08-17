@@ -1,29 +1,19 @@
 {
   "name": "blob-uploader.js",
-  "version": "0.0.1",
   "description": "Javascript wrapper for use of Blob-uploader service",
-  "main": "index.js",
-  "scripts": {
-    "build": "webpack",
-    "pretest": "npm-run-all build karma_start",
-    "karma_start": "karma start",
-    "test": "karma run -- --grep=blobuploader"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/blinkmobile/blob-uploader.js.git"
-  },
-  "author": "",
-  "license": "MIT",
+  "version": "0.0.1",
   "bugs": {
     "url": "https://github.com/blinkmobile/blob-uploader.js/issues"
   },
-  "homepage": "https://github.com/blinkmobile/blob-uploader.js#readme",
+  "dependencies": {
+    "aws-sdk": "2.100.0"
+  },
   "devDependencies": {
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
     "del": "^3.0.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.3.0",
@@ -31,26 +21,33 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "fetch-mock": "^5.12.2",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-eslint": "^4.0.0",
-    "gulp-flowtype": "^1.0.0",
-    "gulp-header": "^1.8.8",
-    "gulp-remark": "^4.0.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
+    "fixpack": "^2.3.1",
     "jasmine-core": "^2.6.4",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
     "karma-jasmine": "^1.1.0",
     "npm-run-all": "^4.0.2",
+    "remark-cli": "^4.0.0",
     "remark-lint": "^6.0.0",
     "remark-preset-lint-recommended": "^3.0.0",
     "uglify-save-license": "^0.4.1",
     "webpack": "^3.5.5"
   },
-  "dependencies": {
-    "aws-sdk": "2.100.0"
+  "homepage": "https://github.com/blinkmobile/blob-uploader.js#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blinkmobile/blob-uploader.js.git"
+  },
+  "scripts": {
+    "build": "webpack",
+    "eslint": "eslint --fix --cache .",
+    "fixpack": "fixpack",
+    "flow_check": "flow check",
+    "karma_start": "karma start",
+    "pretest": "npm-run-all eslint fixpack flow_check remark build karma_start",
+    "remark": "remark . --use remark-preset-lint-recommended",
+    "test": "karma run -- --grep=blobuploader"
   }
 }

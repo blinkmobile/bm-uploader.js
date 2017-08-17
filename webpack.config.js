@@ -3,14 +3,31 @@
 
 const path = require('path')
 
+const webpack = require('webpack')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+
+const pkg = require('./package.json')
+const banner = `/*
+* ${pkg.name}: v${pkg.version} | ${pkg.homepage}
+* (c) ${new Date(Date.now()).getFullYear()} BlinkMobile | Released under the ${pkg.license} license
+*/
+`
+
+let distPath = path.resolve(__dirname, 'dist')
+
 module.exports = {
   entry: './src/blob-uploader.js',
   output: {
     filename: 'bm-blob-uploader.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: distPath,
     libraryTarget: 'var',
     library: 'blobUploader'
   },
+  devtool: 'inline-source-map',
+  plugins: [
+    new CleanWebpackPlugin([distPath]),
+    new webpack.BannerPlugin({ banner: banner, raw: true })
+  ],
   module: {
     rules: [
       {
