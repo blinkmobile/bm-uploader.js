@@ -16,9 +16,12 @@ const banner = `/*
 let distPath = path.resolve(__dirname, 'dist')
 
 module.exports = {
-  entry: './src/blob-uploader.js',
+  entry: {
+    'bm-blob-uploader': './src/blob-uploader.js',
+    'bm-blob-uploader.min' : './src/blob-uploader.js'
+  },
   output: {
-    filename: 'bm-blob-uploader.js',
+    filename: '[name].js',
     path: distPath,
     libraryTarget: 'var',
     library: 'blobUploader'
@@ -26,7 +29,14 @@ module.exports = {
   devtool: 'inline-source-map',
   plugins: [
     new CleanWebpackPlugin([distPath]),
-    new webpack.BannerPlugin({ banner: banner, raw: true })
+    new webpack.optimize.UglifyJsPlugin({
+      include: /\.min\.js$/,
+      minimize: true
+    }),
+    new webpack.BannerPlugin({
+      banner: banner,
+      raw: true
+    })
   ],
   module: {
     rules: [
