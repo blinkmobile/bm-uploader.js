@@ -6,7 +6,7 @@ describe('blobuploader', () => {
   var originalTimeout;
     beforeEach(() => {
       originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000
       fetchMock
         .post(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { putUrl: 'www.putUrl.com', id: 'abc123' })
         .put(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { getUrl: 'www.getUrl.com' })

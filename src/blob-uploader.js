@@ -121,23 +121,23 @@ blobUploader.prototype.managedUpload = function (
       return response.json()
     })
     .then((apiResponse) => {
-      return apiResponse.id // TODO Implement call to S3
-      // const AWS = require('aws-sdk')
-      // const s3 = new AWS.S3({
-      //   accessKeyId: apiResponse.credentials.AccessKeyId,
-      //   secretAccessKey: apiResponse.credentials.SecretAccessKey,
-      //   sessionToken: apiResponse.credentials.SessionToken,
-      //   region: 'ap-southeast-2'
-      // })
-      // const params = {
-      //   Bucket: apiResponse.bucket,
-      //   Key: apiResponse.id,
-      //   Body: blob
-      // }
-      // const managedUpload = s3.upload(params)
-      // return managedUpload
-      //   .promise()
-      //   .then(apiResponse.id)
+      // return apiResponse.id // TODO Implement call to S3
+      const S3 = require('aws-sdk/clients/s3')
+      const s3 = new S3({
+        accessKeyId: apiResponse.credentials.AccessKeyId,
+        secretAccessKey: apiResponse.credentials.SecretAccessKey,
+        sessionToken: apiResponse.credentials.SessionToken,
+        region: 'ap-southeast-2'
+      })
+      const params = {
+        Bucket: apiResponse.bucket,
+        Key: apiResponse.id,
+        Body: blob
+      }
+      const managedUpload = s3.upload(params)
+      return managedUpload
+        .promise()
+        .then(apiResponse.id)
     })
     .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
