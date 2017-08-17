@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="../dist/bm-blob-uploader.min.js"></script>
+  </head>
+  <body>
+    <h1>Blob uploader example</h1>
+    <input type="file" id="input" onchange="handleFile(this.files[0])">
+
+    <div id='result' style="display:none">
+    </div>
+
+    <script>
+      var blobUploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      var resultEl = document.getElementById('result')
+      var handleFile = function(file) {
+        blobUploader.managedUpload(file)
+          .then((result) => {
+            resultEl.innerText = 'Upload succeeded with result: ' + result
+            resultEl.style.display = 'block'
+          })
+          .catch((err) => {
+            resultEl.innerText = 'Upload failed with err: ' + err
+            resultEl.style.display = 'block'
+          })
+      }
+    </script>
+  </body>
+</html>
