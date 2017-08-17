@@ -42,7 +42,7 @@
       return Promise.reject(new Error('blobUploader uri not configured'));
     }
 
-    var request = new Request(vars.uri, {
+    var request = new Request(vars.uri + 'v1/signedURL/', {
       method: 'POST',
       mode: 'cors'
     });
@@ -95,7 +95,7 @@
       return Promise.reject(new Error('blobUploader uri not configured'));
     }
 
-    var request = new Request(vars.uri + uuid, {
+    var request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
       method: 'PUT',
       mode: 'cors'
     });
@@ -109,6 +109,50 @@
       return apiResponse.getUrl;
     }).catch(function (err) {
       return Promise.reject(new Error('Error retrieving blob url: ' + err));
+    });
+  };
+
+  blobUploader.prototype.managedUpload = function (blob /*: Blob */
+  ) /* :Promise<number> */{
+    if (!blob) {
+      return Promise.reject(new Error('blob argument not provided'));
+    }
+
+    var vars = privateVars.get(this);
+    if (!vars || !vars.hasOwnProperty('uri')) {
+      return Promise.reject(new Error('blobUploader uri not configured'));
+    }
+
+    var request = new Request(vars.uri + 'v1/temporaryCredentials', {
+      method: 'GET',
+      mode: 'cors'
+    });
+
+    return fetch(request).then(function (response) {
+      if (!response.ok) {
+        return Promise.reject(new Error(response.status + ' ' + response.statusText));
+      }
+      return response.json();
+    }).then(function (apiResponse) {
+      return apiResponse.id; // TODO Implement call to S3
+      // const AWS = require('aws-sdk')
+      // const s3 = new AWS.S3({
+      //   accessKeyId: apiResponse.credentials.AccessKeyId,
+      //   secretAccessKey: apiResponse.credentials.SecretAccessKey,
+      //   sessionToken: apiResponse.credentials.SessionToken,
+      //   region: 'ap-southeast-2'
+      // })
+      // const params = {
+      //   Bucket: apiResponse.bucket,
+      //   Key: apiResponse.id,
+      //   Body: blob
+      // }
+      // const managedUpload = s3.upload(params)
+      // return managedUpload
+      //   .promise()
+      //   .then(apiResponse.id)
+    }).catch(function (err) {
+      return Promise.reject(new Error('Error calling blob api service: ' + err));
     });
   };
 

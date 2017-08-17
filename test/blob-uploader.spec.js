@@ -25,21 +25,21 @@ describe('blobuploader', () => {
     })
 
     it('should succeed if url is supplied', () => {
-      expect(() => { blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/') }).toBeDefined()
+      expect(() => { blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
       // expect(() => { var a = true }).toThrow()
     })
   })
 
   describe('uploadBlob', () => {
     it('should reject if blob not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.uploadBlob()
         .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a blob', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
         .then((id) => {
@@ -56,14 +56,14 @@ describe('blobuploader', () => {
 
   describe('retrieveBlobUrl', () => {
     it('should reject if uuid not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.retrieveBlobUrl()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a valid uuid', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/v1/signedURL/')
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
         .then((id) => {
@@ -75,6 +75,30 @@ describe('blobuploader', () => {
               done()
             })
             .catch((err) => { done.fail(err) })
+        })
+        .catch((err) => { done.fail(err) })
+      }
+      catch(e) {
+        done.fail(e)
+      }
+    })
+  })
+
+  describe('managedUpload', () => {
+    it('should reject if blob not passed in', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      uploader.managedUpload()
+        .then((blob) => { done.fail() })
+        .catch((err) => { done() })
+    })
+
+    it('should succeed when given a blob', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      try {
+      uploader.managedUpload(new Blob(['111']))
+        .then((id) => {
+          expect(id.length).toBeGreaterThan(0)
+          done()
         })
         .catch((err) => { done.fail(err) })
       }
