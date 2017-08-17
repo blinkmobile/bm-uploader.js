@@ -4,20 +4,17 @@
 describe('blobuploader', () => {
 
   var originalTimeout;
-    beforeEach(() => {
-      originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000
-      fetchMock
-        .post(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { putUrl: 'www.putUrl.com', id: 'abc123' })
-        .put(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { getUrl: 'www.getUrl.com' })
-        .put(/www.putUrl.com/, 200)
-        .spy()
-    })
+  beforeEach(() => {
+    fetchMock
+      .post(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { putUrl: 'www.putUrl.com', id: 'abc123' })
+      .put(/https:\/\/bm-blob-uploader-dev.api.blinkm.io\/v1\/signedURL/, { getUrl: 'www.getUrl.com' })
+      .put(/www.putUrl.com/, 200)
+      .spy()
+  })
 
-    afterEach(() => {
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-      fetchMock.restore()
-    })
+  afterEach(() => {
+    fetchMock.restore()
+  })
     
   describe('Constructor', () => {
     it('should throw a type error if no url is supplied', () => {
@@ -104,7 +101,7 @@ describe('blobuploader', () => {
       catch(e) {
         done.fail(e)
       }
-    })
+    }, 150000)
   })
 })
 /* eslint-disable */
