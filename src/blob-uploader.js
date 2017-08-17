@@ -97,7 +97,8 @@ blobUploader.prototype.retrieveBlobUrl = function (
 }
 
 blobUploader.prototype.managedUpload = function (
-  blob /*: Blob */
+  blob /*: Blob */,
+  progressFn /* ?:Function */
 ) /* :Promise<number> */ {
   if (!blob) {
     return Promise.reject(new Error('blob argument not provided'))
@@ -134,6 +135,11 @@ blobUploader.prototype.managedUpload = function (
         Body: blob
       }
       const managedUpload = s3.upload(params)
+      if (progressFn) {
+        managedUpload.on('httpUploadProgress', (evt) => {
+          progressFn(evt)
+        })
+      }
       return managedUpload
         .promise()
         .then(() => apiResponse.id)
