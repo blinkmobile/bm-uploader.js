@@ -36,9 +36,11 @@
       var resultEl = document.getElementById('result')
       var cancelEl = document.getElementById('cancel')
       var handleFile = function(file) {
+        resultEl.innerText = ''
+        resultEl.style.display = 'none'
         blobUploader.managedUpload(file, progressHandler, cancelEventName)
-          .then((result) => {
-            resultEl.innerText = 'Upload succeeded with result: ' + result
+          .then((id) => {
+            resultEl.innerText = 'Upload succeeded with id: ' + id
             resultEl.style.display = 'block'
           })
           .catch((err) => {

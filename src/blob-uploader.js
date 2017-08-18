@@ -150,7 +150,7 @@ blobUploader.prototype.managedUpload = function (
         .promise()
         .then(() => apiResponse.id)
     })
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
+    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
 module.exports = blobUploader
