@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <script src="../dist/bm-blob-uploader.min.js"></script>
+    <script src="../dist/bm-blob-uploader.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -10,7 +10,6 @@
     <div class='container'>
       <h1>Blob uploader example</h1>
       <input type="file" id="input" onchange="handleFile(this.files[0])">
-
       <div id='result' style="display:none">
       </div>
       <div class='progress'>
@@ -18,6 +17,7 @@
           0%
         </div>
       </div>
+      <button type='button' id='cancel' onclick='cancelHandler()'>Cancel</button>
     </div>
     <script>
       var progressHandler = function(evt) {
@@ -27,10 +27,16 @@
         progressBarEl.setAttribute('aria-valuenow', percentage)
         progressBarEl.style.width = percentage+'%'
       }
+      var cancelEventName = 'cancel'
+      var cancelEvent = new Event(cancelEventName)
+      var cancelHandler = function() {
+        window.dispatchEvent(cancelEvent)
+      }
       var blobUploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       var resultEl = document.getElementById('result')
+      var cancelEl = document.getElementById('cancel')
       var handleFile = function(file) {
-        blobUploader.managedUpload(file, progressHandler)
+        blobUploader.managedUpload(file, progressHandler, cancelEventName)
           .then((result) => {
             resultEl.innerText = 'Upload succeeded with result: ' + result
             resultEl.style.display = 'block'
