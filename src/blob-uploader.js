@@ -128,7 +128,7 @@ blobUploader.prototype.managedUpload = function (
         accessKeyId: apiResponse.credentials.AccessKeyId,
         secretAccessKey: apiResponse.credentials.SecretAccessKey,
         sessionToken: apiResponse.credentials.SessionToken,
-        region: 'ap-southeast-2'
+        region: apiResponse.region
       })
       const params = {
         Bucket: apiResponse.bucket,
