@@ -10,8 +10,9 @@ new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
 ```
 blobUploader.uploadBlob(blob, progressFn, cancelEventName)
 ```
+3.  To upload a image call blobUploader.UploadImage which supports a progress event, cancellation and will adjust to network conditions. This function takes as parameters the image to be uploaded, a function that will be called with a progress event(OPTIONAL) and an event name that will be used to a listen for event to signal cancelling the upload(OPTIONAL). This will return a Promise that will resolve with the id that can be used later to retrieve the blob. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
 
-3.  To retrieve a URL to the blob in S3, call blobUploader.retrieveBlobUrl. This will return a Promise that will resolve to URL that get by used with HTTP GET to retrieve the blob.
+4.  To retrieve a URL to the blob in S3, call blobUploader.retrieveBlobUrl. This will return a Promise that will resolve to URL that get by used with HTTP GET to retrieve the blob.
 ```
 blobUploader.retrieveBlobUrl(id)
 ```
