@@ -45,8 +45,9 @@
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
     "flow_check": "flow check",
+    "karma": "karma start karma.conf.js --single-run false",
     "pretest": "npm-run-all eslint fixpack flow_check remark build",
     "remark": "remark . --use remark-preset-lint-recommended",
-    "test": "karma start karma.conf.js --single-run"
+    "test": "karma start karma.conf.js"
   }
 }

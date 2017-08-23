@@ -47,7 +47,7 @@ blobUploader.prototype.uploadBlob = function (
   blob /*: Blob */,
   progressFn /* ?:Function */,
   cancelEventName /* ?:string */
-) /* :Promise<number> */ {
+) /* :Promise<string> */ {
   if (!blob) {
     return Promise.reject(new Error('blob argument not provided'))
   }
@@ -98,6 +98,37 @@ blobUploader.prototype.uploadBlob = function (
         .then(() => apiResponse.id)
     })
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
+}
+
+blobUploader.prototype.uploadImage = function (
+  image /*: Image */,
+  progressFn /* ?:Function */,
+  cancelEventName /* ?:string */
+) /* :Promise<string> */ {
+  if (!image) {
+    return Promise.reject(new Error('image argument not provided'))
+  }
+
+  const vars = privateVars.get(this)
+  if (!vars || !vars.hasOwnProperty('uri')) {
+    return Promise.reject(new Error('blobUploader uri not configured'))
+  }
+
+  // Create an empty canvas element
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+
+  // Copy the image contents to the canvas
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(image, 0, 0)
+  const _this = this
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      resolve(_this.uploadBlob(blob, progressFn, cancelEventName))
+    })
+  })
 }
 
 module.exports = blobUploader

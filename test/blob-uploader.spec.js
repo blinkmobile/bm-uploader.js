@@ -60,7 +60,7 @@ describe('blobuploader', () => {
     it('should reject if blob not passed in', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.uploadBlob()
-        .then((blob) => { done.fail() })
+        .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
 
@@ -68,6 +68,30 @@ describe('blobuploader', () => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
+        .then((id) => {
+          expect(id.length).toBeGreaterThan(0)
+          done()
+        })
+        .catch((err) => { done.fail(err) })
+      }
+      catch(e) {
+        done.fail(e)
+      }
+    }, 150000)
+  })
+
+  describe('uploadImage', () => {
+    it('should reject if image not passed in', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      uploader.uploadImage()
+        .then((id) => { done.fail() })
+        .catch((err) => { done() })
+    })
+
+    xit('should succeed when given a Image', (done) => {
+      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      try {
+      uploader.uploadImage(new Image(100, 200))
         .then((id) => {
           expect(id.length).toBeGreaterThan(0)
           done()
