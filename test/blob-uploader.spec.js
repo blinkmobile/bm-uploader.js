@@ -26,30 +26,6 @@ describe('blobuploader', () => {
     })
   })
 
-  describe('uploadBlob', () => {
-    it('should reject if blob not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      uploader.uploadBlob()
-        .then((id) => { done.fail() })
-        .catch((err) => { done() })
-    })
-
-    it('should succeed when given a blob', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      try {
-      uploader.uploadBlob(new Blob(['111']))
-        .then((id) => {
-          expect(id.length).toBeGreaterThan(0)
-          done()
-        })
-        .catch((err) => { done.fail(err) })
-      }
-      catch(e) {
-        done.fail(e)
-      }
-    })
-  })
-
   describe('retrieveBlobUrl', () => {
     it('should reject if uuid not passed in', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
@@ -80,10 +56,10 @@ describe('blobuploader', () => {
     })
   })
 
-  describe('managedUpload', () => {
+  describe('uploadBlob', () => {
     it('should reject if blob not passed in', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      uploader.managedUpload()
+      uploader.uploadBlob()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
@@ -91,7 +67,7 @@ describe('blobuploader', () => {
     xit('should succeed when given a blob', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
-      uploader.managedUpload(new Blob(['111']))
+      uploader.uploadBlob(new Blob(['111']))
         .then((id) => {
           expect(id.length).toBeGreaterThan(0)
           done()

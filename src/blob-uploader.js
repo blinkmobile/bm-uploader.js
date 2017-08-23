@@ -12,59 +12,6 @@ function blobUploader (apiUrl /* :string */) {
   })
 }
 
-blobUploader.prototype.uploadBlob = function (
-  blob /*: Blob */
-) /* :Promise<number> */ {
-  if (!blob) {
-    return Promise.reject(new Error('blob argument not provided'))
-  }
-
-  const vars = privateVars.get(this)
-  if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
-  }
-
-  const request = new Request(vars.uri + 'v1/signedURL/', {
-    method: 'POST',
-    mode: 'cors'
-  })
-
-  return fetch(request)
-    .then((response) => {
-      if (!response.ok) {
-        return Promise.reject(new Error(response.status + ' ' + response.statusText))
-      }
-      return response.json()
-    })
-    .then((apiResponse) => {
-      this._uploadToS3(blob, apiResponse.putUrl)
-      return apiResponse.id
-    })
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
-}
-
-blobUploader.prototype._uploadToS3 = function (
-  blob /* :Blob */,
-  url /*: string */
-) /* :Promise<void> */ {
-  const request = new Request(url, {
-    method: 'PUT',
-    mode: 'cors',
-    body: blob,
-    headers: new Headers({
-      'Content-Type': ' '
-    })
-  })
-
-  return fetch(request)
-    .then((response) => {
-      if (!response.ok) {
-        return Promise.reject(Error(response.status + ' ' + response.statusText))
-      }
-    })
-    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
-}
-
 blobUploader.prototype.retrieveBlobUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
@@ -96,7 +43,7 @@ blobUploader.prototype.retrieveBlobUrl = function (
     .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
 }
 
-blobUploader.prototype.managedUpload = function (
+blobUploader.prototype.uploadBlob = function (
   blob /*: Blob */,
   progressFn /* ?:Function */,
   cancelEventName /* ?:string */
