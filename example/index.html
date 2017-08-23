@@ -9,7 +9,13 @@
   <body>
     <div class='container'>
       <h1>Blob uploader example</h1>
-      <input type="file" id="input" onchange="handleFile(this.files[0])">
+      <div>
+        <input type="file" id="input" onchange="handleFile(this.files[0])">
+      </div>
+      <div>
+        <img crossOrigin='anonymous' id='testImage' src='http://i.imgur.com/fHyEMsl.jpg' />
+        <button type='button' id='uploadImage' onclick='uploadImage()'>Upload Image</button>
+      </div>
       <div id='result' style="display:none">
       </div>
       <div class='progress'>
@@ -35,10 +41,24 @@
       var blobUploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       var resultEl = document.getElementById('result')
       var cancelEl = document.getElementById('cancel')
+      var imageEl = document.getElementById('testImage')
       var handleFile = function(file) {
         resultEl.innerText = ''
         resultEl.style.display = 'none'
-        blobUploader.managedUpload(file, progressHandler, cancelEventName)
+        blobUploader.uploadBlob(file, progressHandler, cancelEventName)
+          .then((id) => {
+            resultEl.innerText = 'Upload succeeded with id: ' + id
+            resultEl.style.display = 'block'
+          })
+          .catch((err) => {
+            resultEl.innerText = 'Upload failed with err: ' + err
+            resultEl.style.display = 'block'
+          })
+      }
+      var uploadImage = function() {
+        resultEl.innerText = ''
+        resultEl.style.display = 'none'
+        blobUploader.uploadImage(imageEl, progressHandler, cancelEventName)
           .then((id) => {
             resultEl.innerText = 'Upload succeeded with id: ' + id
             resultEl.style.display = 'block'

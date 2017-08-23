@@ -34,7 +34,7 @@ describe('blobuploader', () => {
         .catch((err) => { done() })
     })
 
-    it('should succeed when given a valid uuid', (done) => {
+    xit('should succeed when given a valid uuid', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
