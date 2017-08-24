@@ -1,3 +1,3 @@
 # blob-uploader.js
 
-Coming soon...
+Include dist/bm-blob-uploader.min.js script, BlobUploader will then be available globally as BlobUploader

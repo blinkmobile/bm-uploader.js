@@ -3,16 +3,16 @@
 
 const privateVars = new WeakMap()
 
-function blobUploader (apiUrl /* :string */) {
+function BlobUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('blobUploader expects a api URL during instantiation')
+    throw new TypeError('BlobUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
   })
 }
 
-blobUploader.prototype.uploadBlob = function (
+BlobUploader.prototype.uploadBlob = function (
   blob /*: Blob */
 ) /* :Promise<number> */ {
   if (!blob) {
@@ -21,10 +21,10 @@ blobUploader.prototype.uploadBlob = function (
 
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
 
-  const request = new Request(vars.uri, {
+  const request = new Request(vars.uri + 'v1/signedURL/', {
     method: 'POST',
     mode: 'cors'
   })
@@ -43,7 +43,7 @@ blobUploader.prototype.uploadBlob = function (
     .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
 }
 
-blobUploader.prototype._uploadToS3 = function (
+BlobUploader.prototype._uploadToS3 = function (
   blob /* :Blob */,
   url /*: string */
 ) /* :Promise<void> */ {
@@ -65,7 +65,7 @@ blobUploader.prototype._uploadToS3 = function (
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
-blobUploader.prototype.retrieveBlobUrl = function (
+BlobUploader.prototype.retrieveBlobUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
   if (!uuid) {
@@ -73,14 +73,14 @@ blobUploader.prototype.retrieveBlobUrl = function (
   }
 
   if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
 
-  const request = new Request(vars.uri + uuid, {
+  const request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
     method: 'PUT',
     mode: 'cors'
   })
@@ -96,4 +96,57 @@ blobUploader.prototype.retrieveBlobUrl = function (
     .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
 }
 
-module.exports = blobUploader
+BlobUploader.prototype.managedUpload = function (
+  blob /*: Blob */,
+  progressFn /* ?:Function */
+) /* :Promise<Object> */ {
+  if (!blob) {
+    return Promise.reject(new Error('blob argument not provided'))
+  }
+
+  const vars = privateVars.get(this)
+  if (!vars || !vars.hasOwnProperty('uri')) {
+    return Promise.reject(new Error('BlobUploader uri not configured'))
+  }
+
+  const request = new Request(vars.uri + 'v1/temporaryCredentials', {
+    method: 'GET',
+    mode: 'cors'
+  })
+
+  return fetch(request)
+    .then((response) => {
+      if (!response.ok) {
+        return Promise.reject(new Error(response.status + ' ' + response.statusText))
+      }
+      return response.json()
+    })
+    .then((apiResponse) => {
+      const S3 = require('aws-sdk/clients/s3')
+      const s3 = new S3({
+        accessKeyId: apiResponse.credentials.AccessKeyId,
+        secretAccessKey: apiResponse.credentials.SecretAccessKey,
+        sessionToken: apiResponse.credentials.SessionToken,
+        region: apiResponse.region
+      })
+      const params = {
+        Bucket: apiResponse.bucket,
+        Key: apiResponse.id,
+        Body: blob
+      }
+      const managedUpload = s3.upload(params)
+      if (progressFn) {
+        managedUpload.on('httpUploadProgress', (evt) => {
+          progressFn(evt.loaded, evt.total)
+        })
+      }
+      return {
+        upload: () => managedUpload.promise(),
+        cancel: () => managedUpload.abort(),
+        id: apiResponse.id
+      }
+    })
+    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
+}
+
+module.exports = BlobUploader

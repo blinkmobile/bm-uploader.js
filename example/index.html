@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="../dist/bm-blob-uploader.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class='container'>
+      <h1>Blob uploader example</h1>
+      <input type="file" id="input" onchange="handleFile(this.files[0])">
+      <div id='result' style="display:none">
+      </div>
+      <div class='progress'>
+        <div class='progress-bar' role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+          0%
+        </div>
+      </div>
+      <button type='button' id='cancel' onclick='cancelHandler()'>Cancel</button>
+    </div>
+    <script>
+      var progressHandler = function(uploaded, total) {
+        var progressBarEl = document.getElementsByClassName('progress-bar')[0]
+        const percentage = parseInt((uploaded * 100) / total)
+        progressBarEl.innerText = percentage+'%'
+        progressBarEl.setAttribute('aria-valuenow', percentage)
+        progressBarEl.style.width = percentage+'%'
+      }
+      var cancelHandler = function() {
+        if (uploaderCancelFn) {
+          uploaderCancelFn()
+        }
+      }
+      var blobUploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      var resultEl = document.getElementById('result')
+      var cancelEl = document.getElementById('cancel')
+      var uploaderCancelFn
+      var handleFile = function(file) {
+        resultEl.innerText = ''
+        resultEl.style.display = 'none'
+        blobUploader.managedUpload(file, progressHandler)
+          .then((uploader) => {
+            uploaderCancelFn = uploader.cancel
+            return uploader.upload()
+              .then(() => {
+                resultEl.innerText = 'Upload succeeded with id: ' + uploader.id
+                resultEl.style.display = 'block'
+                uploaderCancelFn = undefined
+              })
+          })
+          .catch((err) => {
+            resultEl.innerText = 'Upload failed with err: ' + err
+            resultEl.style.display = 'block'
+            uploaderCancelFn = undefined
+          })
+      }
+    </script>
+  </body>
+</html>
