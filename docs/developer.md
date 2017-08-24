@@ -2,9 +2,9 @@
 
 This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieval of blobs from S3 without having to work with AWS credentials and the AWS SDK directly.
 ## Usage
-1.  Initialise the blobUploader with the URL of the blob uploader service, e.g. 
+1.  Initialise the BlobUploader with the URL of the blob uploader service, e.g. 
 ```
-new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
 ```
 2.  For simple upload via a single HTTP PUT, blobUploader.uploadBlob with the blob to be uploaded. This will return a Promise that will resolve with the id that can be used later to retrieve the blob.
 ```

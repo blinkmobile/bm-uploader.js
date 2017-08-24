@@ -1,7 +1,7 @@
 'use strict'
 
 /* eslint-disable */
-describe('blobuploader', () => {
+describe('Blobuploader', () => {
 
   var originalTimeout;
   beforeEach(() => {
@@ -18,24 +18,24 @@ describe('blobuploader', () => {
     
   describe('Constructor', () => {
     it('should throw a type error if no url is supplied', () => {
-      expect(() => { blobUploader() }).toThrow()
+      expect(() => { BlobUploader() }).toThrow()
     })
 
     it('should succeed if url is supplied', () => {
-      expect(() => { blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
+      expect(() => { BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
     })
   })
 
   describe('uploadBlob', () => {
     it('should reject if blob not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.uploadBlob()
         .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a blob', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
         .then((id) => {
@@ -52,14 +52,14 @@ describe('blobuploader', () => {
 
   describe('retrieveBlobUrl', () => {
     it('should reject if uuid not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.retrieveBlobUrl()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a valid uuid', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadBlob(new Blob(['111']))
         .then((id) => {
@@ -82,14 +82,14 @@ describe('blobuploader', () => {
 
   describe('managedUpload', () => {
     it('should reject if blob not passed in', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.managedUpload()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a blob', (done) => {
-      const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.managedUpload(new Blob(['111']))
         .then((upload) => {
