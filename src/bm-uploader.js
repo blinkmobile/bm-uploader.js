@@ -3,16 +3,16 @@
 
 const privateVars = new WeakMap()
 
-function BlobUploader (apiUrl /* :string */) {
+function bmUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('BlobUploader expects a api URL during instantiation')
+    throw new TypeError('bmUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
   })
 }
 
-BlobUploader.prototype.retrieveContentUrl = function (
+bmUploader.prototype.retrieveContentUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
   if (!uuid) {
@@ -20,11 +20,11 @@ BlobUploader.prototype.retrieveContentUrl = function (
   }
 
   if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('bmUploader uri not configured'))
   }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('bmUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
@@ -40,10 +40,10 @@ BlobUploader.prototype.retrieveContentUrl = function (
       return response.json()
     })
     .then((apiResponse) => apiResponse.getUrl)
-    .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
+    .catch((err) => Promise.reject(new Error('Error retrieving content url: ' + err)))
 }
 
-BlobUploader.prototype.uploadContent = function (
+bmUploader.prototype.uploadContent = function (
   content /*: Buffer | Blob | any */,
   progressFn /* ?:Function */
 ) /* :Promise<Object> */ {
@@ -53,7 +53,7 @@ BlobUploader.prototype.uploadContent = function (
 
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('bmUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/temporaryCredentials', {
@@ -96,4 +96,4 @@ BlobUploader.prototype.uploadContent = function (
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
-module.exports = BlobUploader
+module.exports = bmUploader

@@ -1,9 +1,9 @@
 {
-  "name": "blob-uploader.js",
-  "description": "Javascript wrapper for use of Blob-uploader service",
+  "name": "bm-uploader.js",
+  "description": "Javascript wrapper for use of Blob-uploader service to upload and retrieve content of types buffer, blob or stream",
   "version": "0.0.1",
   "bugs": {
-    "url": "https://github.com/blinkmobile/blob-uploader.js/issues"
+    "url": "https://github.com/blinkmobile/bm-uploader.js/issues"
   },
   "dependencies": {
     "aws-sdk": "2.100.0"
@@ -33,12 +33,12 @@
     "remark-preset-lint-recommended": "^3.0.0",
     "webpack": "^3.5.5"
   },
-  "homepage": "https://github.com/blinkmobile/blob-uploader.js#readme",
+  "homepage": "https://github.com/blinkmobile/bm-uploader.js#readme",
   "license": "MIT",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blinkmobile/blob-uploader.js.git"
+    "url": "git+https://github.com/blinkmobile/bm-uploader.js.git"
   },
   "scripts": {
     "build": "webpack",
