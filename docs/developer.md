@@ -1,6 +1,6 @@
 # blob-uploader.js
 
-This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieve of blobs from S3 without having to work with AWS credentials and the AWS SDK directly.
+This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieval of blobs from S3 without having to work with AWS credentials and the AWS SDK directly.
 ## Usage
 1.  Initialise the blobUploader with the URL of the blob uploader service, e.g. 
 ```
@@ -12,12 +12,12 @@ blobUploader.uploadBlob(blob)
 ```
 OR
 
-2.  For a managed upload which supports a progress event, cancellation and will adjust to network conditions, call blobUploader.ManagedUpload. This function takes as parameters the blob to be uploaded, a function that will be called with a progress event(OPTIONAL) and an event name that will be used to a listen for event to signal cancelling the upload(OPTIONAL). This will return a Promise that will resolve with the id that can be used later to retrieve the blob. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
+2.  For a managed upload which supports a progress event, cancellation and will adjust to network conditions, call blobUploader.ManagedUpload. This function takes as parameters the blob to be uploaded and a function that will be called with a progress event(OPTIONAL). This will return a Promise that will resolve with an object that includes the id that can be used later to retrieve the blob, a function upload()which returns a promise that will resolve when the upload succeeds or rejects if the upload fails or is stopped, and a function cancel() that will abort the upload. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
 ```
-blobUploader.managedUpload(blob, progressFn, cancelEventName)
+blobUploader.managedUpload(blob, progressFn)
 ```
 
-3.  To retrieve a URL to the blob in S3, call blobUploader.retreiveBlobUrl. This will return a Promise that will resolve to URL that get by used with HTTP GET to retreive the blob.
+3.  To retrieve a URL to the blob in S3, call blobUploader.retrieveBlobUrl. This will return a Promise that will resolve to a URL that can be used with HTTP GET to retrieve the blob.
 ```
 blobUploader.retrieveBlobUrl(id)
 ```
