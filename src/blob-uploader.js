@@ -3,16 +3,16 @@
 
 const privateVars = new WeakMap()
 
-function blobUploader (apiUrl /* :string */) {
+function BlobUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('blobUploader expects a api URL during instantiation')
+    throw new TypeError('BlobUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
   })
 }
 
-blobUploader.prototype.retrieveBlobUrl = function (
+BlobUploader.prototype.retrieveBlobUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
   if (!uuid) {
@@ -20,11 +20,11 @@ blobUploader.prototype.retrieveBlobUrl = function (
   }
 
   if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
@@ -43,18 +43,17 @@ blobUploader.prototype.retrieveBlobUrl = function (
     .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
 }
 
-blobUploader.prototype.uploadBlob = function (
+BlobUploader.prototype.uploadBlob = function (
   blob /*: Blob */,
-  progressFn /* ?:Function */,
-  cancelEventName /* ?:string */
-) /* :Promise<string> */ {
+  progressFn /* ?:Function */
+) /* :Promise<Object> */ {
   if (!blob) {
     return Promise.reject(new Error('blob argument not provided'))
   }
 
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('blobUploader uri not configured'))
+    return Promise.reject(new Error('BlobUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/temporaryCredentials', {
@@ -75,7 +74,7 @@ blobUploader.prototype.uploadBlob = function (
         accessKeyId: apiResponse.credentials.AccessKeyId,
         secretAccessKey: apiResponse.credentials.SecretAccessKey,
         sessionToken: apiResponse.credentials.SessionToken,
-        region: 'ap-southeast-2'
+        region: apiResponse.region
       })
       const params = {
         Bucket: apiResponse.bucket,
@@ -85,26 +84,22 @@ blobUploader.prototype.uploadBlob = function (
       const managedUpload = s3.upload(params)
       if (progressFn) {
         managedUpload.on('httpUploadProgress', (evt) => {
-          progressFn(evt)
+          progressFn(evt.loaded, evt.total)
         })
       }
-      if (cancelEventName) {
-        window.addEventListener(cancelEventName, () => {
-          managedUpload.abort()
-        })
+      return {
+        upload: () => managedUpload.promise(),
+        cancel: () => managedUpload.abort(),
+        id: apiResponse.id
       }
-      return managedUpload
-        .promise()
-        .then(() => apiResponse.id)
     })
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
-blobUploader.prototype.uploadImage = function (
+BlobUploader.prototype.uploadImage = function (
   image /*: Image */,
-  progressFn /* ?:Function */,
-  cancelEventName /* ?:string */
-) /* :Promise<string> */ {
+  progressFn /* ?:Function */
+) /* :Promise<Object> */ {
   if (!image) {
     return Promise.reject(new Error('image argument not provided'))
   }
@@ -126,9 +121,9 @@ blobUploader.prototype.uploadImage = function (
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
-      resolve(_this.uploadBlob(blob, progressFn, cancelEventName))
+      resolve(_this.uploadBlob(blob, progressFn))
     })
   })
 }
 
-module.exports = blobUploader
+module.exports = BlobUploader

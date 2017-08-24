@@ -24,7 +24,7 @@ module.exports = {
     filename: '[name].js',
     path: distPath,
     libraryTarget: 'var',
-    library: 'blobUploader'
+    library: 'BlobUploader'
   },
   devtool: 'inline-source-map',
   plugins: [

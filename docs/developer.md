@@ -1,18 +1,49 @@
 # blob-uploader.js
 
-This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieve of blobs from S3 without having to work with AWS credentials and the AWS SDK directly.
-## Usage
-1.  Initialise the blobUploader with the URL of the blob uploader service, e.g. 
-```
-new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-```
-2.  To upload a blob call blobUploader.UploadBlob which supports a progress event, cancellation and will adjust to network conditions. This function takes as parameters the blob to be uploaded, a function that will be called with a progress event(OPTIONAL) and an event name that will be used to a listen for event to signal cancelling the upload(OPTIONAL). This will return a Promise that will resolve with the id that can be used later to retrieve the blob. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
-```
-blobUploader.uploadBlob(blob, progressFn, cancelEventName)
-```
-3.  To upload a image call blobUploader.UploadImage which supports a progress event, cancellation and will adjust to network conditions. This function takes as parameters the image to be uploaded, a function that will be called with a progress event(OPTIONAL) and an event name that will be used to a listen for event to signal cancelling the upload(OPTIONAL). This will return a Promise that will resolve with the id that can be used later to retrieve the blob. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
+This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieval of blobs from S3 without having to work with AWS credentials and the AWS SDK directly.
 
-4.  To retrieve a URL to the blob in S3, call blobUploader.retrieveBlobUrl. This will return a Promise that will resolve to URL that get by used with HTTP GET to retrieve the blob.
+## Usage
+1.  Initialise the BlobUploader with the URL of the blob uploader service, e.g. 
+```
+new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+```
+2.  To upload a blob call blobUploader.UploadBlob which supports a progress event, cancellation and will adjust to network conditions, call blobUploader.managedUpload. This function takes as parameters the blob to be uploaded and a function that will be called with a progress event(OPTIONAL). This will return a Promise that will resolve with an object that includes the id that can be used later to retrieve the blob, a function upload() which returns a promise that will resolve when the upload succeeds or rejects if the upload fails or is stopped, and a function cancel() that will abort the upload. The progress function will called with two parameters, uploaded (number of bytes uploaded) and total(number of bytes being uploaded) 
+```
+function progressFn (uploaded, total) {
+  const percentage = parseInt((uploaded * 100) / total)
+  // update progress indicator
+}
+
+function cancelOnClick() {
+  if (cancelFn) {
+    cancelFn()
+  }
+}
+
+let cancelFn
+
+blobUploader.uploadBlob(blob, progressFn)
+  .then((uploader) => {
+    cancelFn = uploader.cancel
+    return uploader.upload()
+      .then(() => {
+        cancelFn = undefined
+        //store uploader.id or use to retrieve a GET URL as per step 3 below
+      })
+  })
+  .catch((err) => //error handling)
+```
+3.  To upload a image call blobUploader.UploadImage which convert's the image to a blob and calls uploadBlob() as per step 2 above
+```
+blobUploader.uploadImage(image, progressFn)
+// Rest of example as per step 2 above
+```
+
+4.  To retrieve a URL to the blob in S3, call blobUploader.retrieveBlobUrl. This will return a Promise that will resolve to a URL that can be used with HTTP GET to retrieve the blob.
 ```
 blobUploader.retrieveBlobUrl(id)
+  .then((getUrl) => //use HTTP GET to retrieve content)
 ```
+
+## Example
+See [Example](../example/index.html) of using the library for uploading blobs(files in this example) and images

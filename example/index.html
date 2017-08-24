@@ -26,46 +26,59 @@
       <button type='button' id='cancel' onclick='cancelHandler()'>Cancel</button>
     </div>
     <script>
-      var progressHandler = function(evt) {
+      var progressHandler = function(uploaded, total) {
         var progressBarEl = document.getElementsByClassName('progress-bar')[0]
-        const percentage = parseInt((evt.loaded * 100) / evt.total)
+        const percentage = parseInt((uploaded * 100) / total)
         progressBarEl.innerText = percentage+'%'
         progressBarEl.setAttribute('aria-valuenow', percentage)
         progressBarEl.style.width = percentage+'%'
       }
-      var cancelEventName = 'cancel'
-      var cancelEvent = new Event(cancelEventName)
       var cancelHandler = function() {
-        window.dispatchEvent(cancelEvent)
+        if (uploaderCancelFn) {
+          uploaderCancelFn()
+        }
       }
-      var blobUploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      var blobUploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       var resultEl = document.getElementById('result')
       var cancelEl = document.getElementById('cancel')
       var imageEl = document.getElementById('testImage')
-      var handleFile = function(file) {
-        resultEl.innerText = ''
-        resultEl.style.display = 'none'
-        blobUploader.uploadBlob(file, progressHandler, cancelEventName)
-          .then((id) => {
-            resultEl.innerText = 'Upload succeeded with id: ' + id
-            resultEl.style.display = 'block'
-          })
-          .catch((err) => {
-            resultEl.innerText = 'Upload failed with err: ' + err
-            resultEl.style.display = 'block'
-          })
-      }
       var uploadImage = function() {
         resultEl.innerText = ''
         resultEl.style.display = 'none'
-        blobUploader.uploadImage(imageEl, progressHandler, cancelEventName)
-          .then((id) => {
-            resultEl.innerText = 'Upload succeeded with id: ' + id
-            resultEl.style.display = 'block'
+        blobUploader.uploadImage(imageEl, progressHandler)
+          .then((uploader) => {
+            uploaderCancelFn = uploader.cancel
+            return uploader.upload()
+              .then(() => {
+                resultEl.innerText = 'Upload succeeded with id: ' + uploader.id
+                resultEl.style.display = 'block'
+                uploaderCancelFn = undefined
+              })
+          })
+        .catch((err) => {
+          resultEl.innerText = 'Upload failed with err: ' + err
+          resultEl.style.display = 'block'
+          uploaderCancelFn = undefined
+        })
+      }
+      var uploaderCancelFn
+      var handleFile = function(file) {
+        resultEl.innerText = ''
+        resultEl.style.display = 'none'
+        blobUploader.uploadBlob(file, progressHandler)
+          .then((uploader) => {
+            uploaderCancelFn = uploader.cancel
+            return uploader.upload()
+              .then(() => {
+                resultEl.innerText = 'Upload succeeded with id: ' + uploader.id
+                resultEl.style.display = 'block'
+                uploaderCancelFn = undefined
+              })
           })
           .catch((err) => {
             resultEl.innerText = 'Upload failed with err: ' + err
             resultEl.style.display = 'block'
+            uploaderCancelFn = undefined
           })
       }
     </script>
