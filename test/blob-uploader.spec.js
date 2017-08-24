@@ -88,12 +88,12 @@ describe('blobuploader', () => {
         .catch((err) => { done() })
     })
 
-    xit('should succeed when given a blob', (done) => {
+    it('should succeed when given a blob', (done) => {
       const uploader = new blobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.managedUpload(new Blob(['111']))
-        .then((id) => {
-          expect(id.length).toBeGreaterThan(0)
+        .then((upload) => {
+          expect(upload.id.length).toBeGreaterThan(0)
           done()
         })
         .catch((err) => { done.fail(err) })

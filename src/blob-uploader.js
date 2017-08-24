@@ -98,9 +98,8 @@ blobUploader.prototype.retrieveBlobUrl = function (
 
 blobUploader.prototype.managedUpload = function (
   blob /*: Blob */,
-  progressFn /* ?:Function */,
-  cancelEventName /* ?:string */
-) /* :Promise<number> */ {
+  progressFn /* ?:Function */
+) /* :Promise<Object> */ {
   if (!blob) {
     return Promise.reject(new Error('blob argument not provided'))
   }
@@ -141,14 +140,11 @@ blobUploader.prototype.managedUpload = function (
           progressFn(evt)
         })
       }
-      if (cancelEventName) {
-        window.addEventListener(cancelEventName, () => {
-          managedUpload.abort()
-        })
+      return {
+        upload: () => { return managedUpload.promise() },
+        cancel: () => { managedUpload.abort() },
+        id: apiResponse.id
       }
-      return managedUpload
-        .promise()
-        .then(() => apiResponse.id)
     })
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
