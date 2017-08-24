@@ -1,7 +1,7 @@
 'use strict'
 
 /* eslint-disable */
-describe('Blobuploader', () => {
+describe('BlobUploader', () => {
 
   var originalTimeout;
   beforeEach(() => {
@@ -26,10 +26,10 @@ describe('Blobuploader', () => {
     })
   })
 
-  describe('retrieveBlobUrl', () => {
+  describe('retrieveContentUrl', () => {
     it('should reject if uuid not passed in', (done) => {
       const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      uploader.retrieveBlobUrl()
+      uploader.retrieveContentUrl()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
@@ -37,7 +37,7 @@ describe('Blobuploader', () => {
     it('should succeed when given a id', (done) => {
       const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
-        uploader.retrieveBlobUrl('1234')
+        uploader.retrieveContentUrl('1234')
           .then((url) => {
             expect(url).toBeDefined()
             expect(url.length).toBeGreaterThan(0)
@@ -51,10 +51,10 @@ describe('Blobuploader', () => {
     })
   })
 
-  describe('uploadBlob', () => {
-    it('should reject if blob not passed in', (done) => {
+  describe('uploadContent', () => {
+    it('should reject if content not passed in', (done) => {
       const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      uploader.uploadBlob()
+      uploader.uploadContent()
         .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
@@ -62,31 +62,7 @@ describe('Blobuploader', () => {
     it('should succeed when given a blob', (done) => {
       const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
-      uploader.uploadBlob(new Blob(['111']))
-        .then((uploader) => {
-          expect(uploader.id.length).toBeGreaterThan(0)
-          done()
-        })
-        .catch((err) => { done.fail(err) })
-      }
-      catch(e) {
-        done.fail(e)
-      }
-    }, 150000)
-  })
-
-  describe('uploadImage', () => {
-    it('should reject if image not passed in', (done) => {
-      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      uploader.uploadImage()
-        .then((id) => { done.fail() })
-        .catch((err) => { done() })
-    })
-
-    it('should succeed when given a Image', (done) => {
-      const uploader = new BlobUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
-      try {
-      uploader.uploadImage(new Image(100, 200))
+      uploader.uploadContent(new Blob(['111']))
         .then((uploader) => {
           expect(uploader.id.length).toBeGreaterThan(0)
           done()
