@@ -20,9 +20,9 @@
       <button type='button' id='cancel' onclick='cancelHandler()'>Cancel</button>
     </div>
     <script>
-      var progressHandler = function(evt) {
+      var progressHandler = function(uploaded, total) {
         var progressBarEl = document.getElementsByClassName('progress-bar')[0]
-        const percentage = parseInt((evt.loaded * 100) / evt.total)
+        const percentage = parseInt((uploaded * 100) / total)
         progressBarEl.innerText = percentage+'%'
         progressBarEl.setAttribute('aria-valuenow', percentage)
         progressBarEl.style.width = percentage+'%'

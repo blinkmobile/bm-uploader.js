@@ -14,10 +14,10 @@ blobUploader.uploadBlob(blob)
 ```
 OR
 
-2.  For a managed upload which supports a progress event, cancellation and will adjust to network conditions, call blobUploader.managedUpload. This function takes as parameters the blob to be uploaded and a function that will be called with a progress event(OPTIONAL). This will return a Promise that will resolve with an object that includes the id that can be used later to retrieve the blob, a function upload()which returns a promise that will resolve when the upload succeeds or rejects if the upload fails or is stopped, and a function cancel() that will abort the upload. The progress event call will include a progress parameter with properties loaded and total (see [AWS SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3/ManagedUpload.html#httpUploadProgress-event))
+2.  For a managed upload which supports a progress event, cancellation and will adjust to network conditions, call blobUploader.managedUpload. This function takes as parameters the blob to be uploaded and a function that will be called with a progress event(OPTIONAL). This will return a Promise that will resolve with an object that includes the id that can be used later to retrieve the blob, a function upload()which returns a promise that will resolve when the upload succeeds or rejects if the upload fails or is stopped, and a function cancel() that will abort the upload. The progress event call will two parameters, uploaded (number of bytes uploaded) and total(number of bytes being uploaded) 
 ```
-function progressFn (evt) {
-  const percentage = parseInt((evt.loaded * 100) / evt.total)
+function progressFn (uploaded, total) {
+  const percentage = parseInt((uploaded * 100) / total)
   // update progress indicator
 }
 
@@ -48,4 +48,4 @@ blobUploader.retrieveBlobUrl(id)
 ```
 
 ## Example
-An example of using the library for managed upload [Example](../example/index.html)
+See [Example](../example/index.html) of using the library for managed upload 

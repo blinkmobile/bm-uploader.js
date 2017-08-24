@@ -137,7 +137,7 @@ BlobUploader.prototype.managedUpload = function (
       const managedUpload = s3.upload(params)
       if (progressFn) {
         managedUpload.on('httpUploadProgress', (evt) => {
-          progressFn(evt)
+          progressFn(evt.loaded, evt.total)
         })
       }
       return {
