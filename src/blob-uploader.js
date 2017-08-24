@@ -141,8 +141,8 @@ BlobUploader.prototype.managedUpload = function (
         })
       }
       return {
-        upload: () => { return managedUpload.promise() },
-        cancel: () => { managedUpload.abort() },
+        upload: () => managedUpload.promise(),
+        cancel: () => managedUpload.abort(),
         id: apiResponse.id
       }
     })
