@@ -34,6 +34,11 @@
     "remark-preset-lint-recommended": "^3.0.0",
     "webpack": "^3.5.5"
   },
+  "files": [
+    "dist/",
+    "src/",
+    "example/"
+  ],
   "homepage": "https://github.com/blinkmobile/bm-uploader.js#readme",
   "keywords": [
     "S3",
