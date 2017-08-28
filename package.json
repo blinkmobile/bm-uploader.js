@@ -1,9 +1,10 @@
 {
-  "name": "blob-uploader.js",
-  "description": "Javascript wrapper for use of Blob-uploader service",
-  "version": "0.0.1",
+  "name": "bm-uploader.js",
+  "description": "Javascript wrapper for use of Blob-uploader service to upload and retrieve content of types buffer, blob or stream",
+  "version": "1.0.0",
+  "author": "Kieren Powell <kieren@blinkmobile.com.au> (https://github.com/kizaonline)",
   "bugs": {
-    "url": "https://github.com/blinkmobile/blob-uploader.js/issues"
+    "url": "https://github.com/blinkmobile/bm-uploader.js/issues"
   },
   "dependencies": {
     "aws-sdk": "2.100.0"
@@ -33,20 +34,26 @@
     "remark-preset-lint-recommended": "^3.0.0",
     "webpack": "^3.5.5"
   },
-  "homepage": "https://github.com/blinkmobile/blob-uploader.js#readme",
+  "homepage": "https://github.com/blinkmobile/bm-uploader.js#readme",
+  "keywords": [
+    "S3",
+    "browser",
+    "upload"
+  ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/bm-uploader.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blinkmobile/blob-uploader.js.git"
+    "url": "git+https://github.com/blinkmobile/bm-uploader.js.git"
   },
   "scripts": {
     "build": "webpack",
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
     "flow_check": "flow check",
+    "karma": "karma start karma.conf.js --single-run false",
     "pretest": "npm-run-all eslint fixpack flow_check remark build",
     "remark": "remark . --use remark-preset-lint-recommended",
-    "test": "karma start karma.conf.js --single-run"
+    "test": "karma start karma.conf.js"
   }
 }

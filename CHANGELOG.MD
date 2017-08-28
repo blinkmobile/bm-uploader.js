@@ -9,3 +9,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
   - FSS-9: Initial implementation
   - FSS-11: Add managedUpload option
+  - FSS-13: Change to content(buffer | blob | stream) from blob specific

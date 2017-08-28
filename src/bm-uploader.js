@@ -3,69 +3,16 @@
 
 const privateVars = new WeakMap()
 
-function BlobUploader (apiUrl /* :string */) {
+function BMUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('BlobUploader expects a api URL during instantiation')
+    throw new TypeError('BMUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
   })
 }
 
-BlobUploader.prototype.uploadBlob = function (
-  blob /*: Blob */
-) /* :Promise<number> */ {
-  if (!blob) {
-    return Promise.reject(new Error('blob argument not provided'))
-  }
-
-  const vars = privateVars.get(this)
-  if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
-  }
-
-  const request = new Request(vars.uri + 'v1/signedURL/', {
-    method: 'POST',
-    mode: 'cors'
-  })
-
-  return fetch(request)
-    .then((response) => {
-      if (!response.ok) {
-        return Promise.reject(new Error(response.status + ' ' + response.statusText))
-      }
-      return response.json()
-    })
-    .then((apiResponse) => {
-      this._uploadToS3(blob, apiResponse.putUrl)
-      return apiResponse.id
-    })
-    .catch((err) => Promise.reject(new Error('Error calling blob api service: ' + err)))
-}
-
-BlobUploader.prototype._uploadToS3 = function (
-  blob /* :Blob */,
-  url /*: string */
-) /* :Promise<void> */ {
-  const request = new Request(url, {
-    method: 'PUT',
-    mode: 'cors',
-    body: blob,
-    headers: new Headers({
-      'Content-Type': ' '
-    })
-  })
-
-  return fetch(request)
-    .then((response) => {
-      if (!response.ok) {
-        return Promise.reject(Error(response.status + ' ' + response.statusText))
-      }
-    })
-    .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
-}
-
-BlobUploader.prototype.retrieveBlobUrl = function (
+BMUploader.prototype.retrieveContentUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
   if (!uuid) {
@@ -73,11 +20,11 @@ BlobUploader.prototype.retrieveBlobUrl = function (
   }
 
   if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
@@ -93,20 +40,20 @@ BlobUploader.prototype.retrieveBlobUrl = function (
       return response.json()
     })
     .then((apiResponse) => apiResponse.getUrl)
-    .catch((err) => Promise.reject(new Error('Error retrieving blob url: ' + err)))
+    .catch((err) => Promise.reject(new Error('Error retrieving content url: ' + err)))
 }
 
-BlobUploader.prototype.managedUpload = function (
-  blob /*: Blob */,
+BMUploader.prototype.uploadContent = function (
+  content /*: Buffer | Blob | any */,
   progressFn /* ?:Function */
 ) /* :Promise<Object> */ {
-  if (!blob) {
-    return Promise.reject(new Error('blob argument not provided'))
+  if (!content) {
+    return Promise.reject(new Error('content argument not provided'))
   }
 
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('BlobUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/temporaryCredentials', {
@@ -132,7 +79,7 @@ BlobUploader.prototype.managedUpload = function (
       const params = {
         Bucket: apiResponse.bucket,
         Key: apiResponse.id,
-        Body: blob
+        Body: content
       }
       const managedUpload = s3.upload(params)
       if (progressFn) {
@@ -149,4 +96,4 @@ BlobUploader.prototype.managedUpload = function (
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
-module.exports = BlobUploader
+module.exports = BMUploader

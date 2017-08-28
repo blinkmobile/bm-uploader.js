@@ -17,14 +17,14 @@ let distPath = path.resolve(__dirname, 'dist')
 
 module.exports = {
   entry: {
-    'bm-blob-uploader': './src/blob-uploader.js',
-    'bm-blob-uploader.min': './src/blob-uploader.js'
+    'bm-uploader': './src/bm-uploader.js',
+    'bm-uploader.min': './src/bm-uploader.js'
   },
   output: {
     filename: '[name].js',
     path: distPath,
     libraryTarget: 'var',
-    library: 'BlobUploader'
+    library: 'BMUploader'
   },
   devtool: 'inline-source-map',
   plugins: [
