@@ -3,9 +3,9 @@
 This library wraps the blob uploader service [Blob uploader](https://github.com/blinkmobile/blob-uploader) and AWS S3 to allow uploading and retrieval of content from S3 without having to work with AWS credentials and the AWS SDK directly.
 
 ## Usage
-1.  Initialise the bmUploader with the URL of the blob uploader service, e.g. 
+1.  Initialise the BMUploader with the URL of the blob uploader service, e.g. 
 ```
-new bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+const bmUploader = new BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
 ```
 2.  To upload content (where that content is either a buffer, blob or stream) call bmUploader.UploadContent which supports a progress event, cancellation and will adjust to network conditions. This function takes as parameters the content to be uploaded and a function that will be called with a progress event(OPTIONAL). This will return a Promise that will resolve with an object that includes the id that can be used later to retrieve the content, a function upload() which returns a promise that will resolve when the upload succeeds or rejects if the upload fails or is stopped, and a function cancel() that will abort the upload. The progress function will called with two parameters, uploaded (number of bytes uploaded) and total(number of bytes being uploaded) 
 ```

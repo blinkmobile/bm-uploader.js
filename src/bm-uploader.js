@@ -3,16 +3,16 @@
 
 const privateVars = new WeakMap()
 
-function bmUploader (apiUrl /* :string */) {
+function BMUploader (apiUrl /* :string */) {
   if (!apiUrl) {
-    throw new TypeError('bmUploader expects a api URL during instantiation')
+    throw new TypeError('BMUploader expects a api URL during instantiation')
   }
   privateVars.set(this, {
     uri: apiUrl
   })
 }
 
-bmUploader.prototype.retrieveContentUrl = function (
+BMUploader.prototype.retrieveContentUrl = function (
   uuid /* :string */
 ) /* :Promise<string> */ {
   if (!uuid) {
@@ -20,11 +20,11 @@ bmUploader.prototype.retrieveContentUrl = function (
   }
 
   if (!privateVars || !privateVars.get(this)) {
-    return Promise.reject(new Error('bmUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('bmUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/signedURL/' + uuid, {
@@ -43,7 +43,7 @@ bmUploader.prototype.retrieveContentUrl = function (
     .catch((err) => Promise.reject(new Error('Error retrieving content url: ' + err)))
 }
 
-bmUploader.prototype.uploadContent = function (
+BMUploader.prototype.uploadContent = function (
   content /*: Buffer | Blob | any */,
   progressFn /* ?:Function */
 ) /* :Promise<Object> */ {
@@ -53,7 +53,7 @@ bmUploader.prototype.uploadContent = function (
 
   const vars = privateVars.get(this)
   if (!vars || !vars.hasOwnProperty('uri')) {
-    return Promise.reject(new Error('bmUploader uri not configured'))
+    return Promise.reject(new Error('BMUploader uri not configured'))
   }
 
   const request = new Request(vars.uri + 'v1/temporaryCredentials', {
@@ -96,4 +96,4 @@ bmUploader.prototype.uploadContent = function (
     .catch((err) => Promise.reject(new Error('Error uploading to S3: ' + err)))
 }
 
-module.exports = bmUploader
+module.exports = BMUploader

@@ -1,7 +1,7 @@
 'use strict'
 
 /* eslint-disable */
-describe('bmUploader', () => {
+describe('BMUploader', () => {
 
   var originalTimeout;
   beforeEach(() => {
@@ -18,24 +18,24 @@ describe('bmUploader', () => {
     
   describe('Constructor', () => {
     it('should throw a type error if no url is supplied', () => {
-      expect(() => { bmUploader() }).toThrow()
+      expect(() => { BMUploader() }).toThrow()
     })
 
     it('should succeed if url is supplied', () => {
-      expect(() => { bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
+      expect(() => { BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/') }).toBeDefined()
     })
   })
 
   describe('retrieveContentUrl', () => {
     it('should reject if uuid not passed in', (done) => {
-      const uploader = new bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.retrieveContentUrl()
         .then((blob) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a id', (done) => {
-      const uploader = new bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
         uploader.retrieveContentUrl('1234')
           .then((url) => {
@@ -53,14 +53,14 @@ describe('bmUploader', () => {
 
   describe('uploadContent', () => {
     it('should reject if content not passed in', (done) => {
-      const uploader = new bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       uploader.uploadContent()
         .then((id) => { done.fail() })
         .catch((err) => { done() })
     })
 
     it('should succeed when given a blob', (done) => {
-      const uploader = new bmUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
+      const uploader = new BMUploader('https://bm-blob-uploader-dev.api.blinkm.io/')
       try {
       uploader.uploadContent(new Blob(['111']))
         .then((uploader) => {

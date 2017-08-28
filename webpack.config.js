@@ -24,7 +24,7 @@ module.exports = {
     filename: '[name].js',
     path: distPath,
     libraryTarget: 'var',
-    library: 'bmUploader'
+    library: 'BMUploader'
   },
   devtool: 'inline-source-map',
   plugins: [
