@@ -1,7 +1,8 @@
 {
   "name": "bm-uploader.js",
   "description": "Javascript wrapper for use of Blob-uploader service to upload and retrieve content of types buffer, blob or stream",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "author": "Kieren Powell <kieren@blinkmobile.com.au> (https://github.com/kizaonline)",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-uploader.js/issues"
   },
@@ -34,8 +35,13 @@
     "webpack": "^3.5.5"
   },
   "homepage": "https://github.com/blinkmobile/bm-uploader.js#readme",
+  "keywords": [
+    "S3",
+    "browser",
+    "upload"
+  ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/bm-uploader.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blinkmobile/bm-uploader.js.git"
