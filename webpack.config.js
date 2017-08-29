@@ -23,7 +23,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: distPath,
-    libraryTarget: 'var',
+    libraryTarget: 'umd',
     library: 'BMUploader'
   },
   devtool: 'inline-source-map',
