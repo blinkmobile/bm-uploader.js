@@ -6,5 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## 1.0.1 - 2017-08-30
+  - Change module export format from var to umd
 ## 1.0.0 - 2017-08-28
   - Initial implementation

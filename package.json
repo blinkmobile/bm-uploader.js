@@ -1,7 +1,7 @@
 {
   "name": "@blinkmobile/bm-uploader",
   "description": "Javascript wrapper for use of Blob-uploader service to upload and retrieve content of types buffer, blob or stream",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Kieren Powell <kieren@blinkmobile.com.au> (https://github.com/kizaonline)",
   "bugs": {
     "url": "https://github.com/blinkmobile/bm-uploader.js/issues"

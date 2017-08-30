@@ -1,5 +1,5 @@
 /*
-* @blinkmobile/bm-uploader: v1.0.0 | https://github.com/blinkmobile/bm-uploader.js#readme
+* @blinkmobile/bm-uploader: v1.0.1 | https://github.com/blinkmobile/bm-uploader.js#readme
 * (c) 2017 BlinkMobile | Released under the MIT license
 */
 
