@@ -7,7 +7,7 @@
     "url": "https://github.com/blinkmobile/bm-uploader.js/issues"
   },
   "dependencies": {
-    "aws-sdk": "2.125.0"
+    "aws-sdk": "2.126.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
