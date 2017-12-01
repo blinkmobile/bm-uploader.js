@@ -27,7 +27,7 @@
     "jasmine-core": "^2.6.4",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
-    "karma-jasmine": "^1.1.0",
+    "karma-jasmine": "1.1.0",
     "npm-run-all": "^4.0.2",
     "remark-cli": "^4.0.0",
     "remark-lint": "^6.0.0",
