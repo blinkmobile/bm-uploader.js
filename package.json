@@ -31,7 +31,7 @@
     "npm-run-all": "^4.0.2",
     "remark-cli": "^4.0.0",
     "remark-lint": "^6.0.0",
-    "remark-preset-lint-recommended": "^3.0.0",
+    "remark-preset-lint-recommended": "3.0.1",
     "webpack": "^3.6.0"
   },
   "files": [
